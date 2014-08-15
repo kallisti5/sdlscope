@@ -64,16 +64,16 @@ main(int argc, char *argv[])
 							quit = SDL_TRUE;
 							break;
 						case SDLK_1:
-							scope->ToggleState(SCOPE_STATE_EN_CHAN_0);
+							scope->ToggleChannel(SCOPE_STATE_EN_CHAN_0);
 							break;
 						case SDLK_2:
-							scope->ToggleState(SCOPE_STATE_EN_CHAN_1);
+							scope->ToggleChannel(SCOPE_STATE_EN_CHAN_1);
 							break;
 						case SDLK_3:
-							scope->ToggleState(SCOPE_STATE_EN_CHAN_2);
+							scope->ToggleChannel(SCOPE_STATE_EN_CHAN_2);
 							break;
 						case SDLK_4:
-							scope->ToggleState(SCOPE_STATE_EN_CHAN_3);
+							scope->ToggleChannel(SCOPE_STATE_EN_CHAN_3);
 							break;
 					}
 					break;
