@@ -31,13 +31,16 @@ public:
 	void 		CreateWindow(SDL_Surface** window, uint32_t width, uint32_t height);
 
 	void 		ToggleChannel(uint32_t item);
+	void 		ChannelPosition(uint32_t channel, int change);
 
 //	void 		DrawBG(SDL_Surface* screen);
 
 private:
 	uint32_t 	channelState;
 
+	uint32_t 	channelPosition[MAX_CHANNELS];
 	uint32_t 	waveTable[MAX_CHANNELS][MAX_SAMPLES];
+
 	void 		GenerateWave(uint32_t position, uint32_t channel);
 
 	void 		DrawGrid(SDL_Surface* window);

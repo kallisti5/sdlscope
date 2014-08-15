@@ -75,6 +75,30 @@ main(int argc, char *argv[])
 						case SDLK_4:
 							scope->ToggleChannel(SCOPE_STATE_EN_CHAN_3);
 							break;
+						case SDLK_q:
+							scope->ChannelPosition(0, -5);
+							break;
+						case SDLK_a:
+							scope->ChannelPosition(0, 5);
+							break;
+						case SDLK_w:
+							scope->ChannelPosition(1, -5);
+							break;
+						case SDLK_s:
+							scope->ChannelPosition(1, 5);
+							break;
+						case SDLK_e:
+							scope->ChannelPosition(2, -5);
+							break;
+						case SDLK_d:
+							scope->ChannelPosition(2, 5);
+							break;
+						case SDLK_r:
+							scope->ChannelPosition(3, -5);
+							break;
+						case SDLK_f:
+							scope->ChannelPosition(3, 5);
+							break;
 					}
 					break;
 				case SDL_QUIT:

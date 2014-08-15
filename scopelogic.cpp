@@ -16,6 +16,10 @@ ScopeLogic::ScopeLogic()
 	:
 	channelState(0)
 {
+	channelPosition[0] = 0;
+	channelPosition[1] = 0;
+	channelPosition[2] = 0;
+	channelPosition[3] = 0;
 }
 
 
@@ -30,6 +34,13 @@ void
 ScopeLogic::ToggleChannel(uint32_t item)
 {
 	channelState ^= item;
+}
+
+
+void
+ScopeLogic::ChannelPosition(uint32_t channel, int change)
+{
+	channelPosition[channel] += change;
 }
 
 
@@ -216,10 +227,11 @@ ScopeLogic::DrawWave(SDL_Surface *window, uint32_t channel)
 			color = SDL_MapRGB(window->format, 0xFF, 0, 0xFF);
 			break;
 	}
+
+	uint32_t homePosition = (window->h / 2) + channelPosition[channel];
 	
-	for(i = 0; i < window->w; i++) {  
-		DrawPoint(window, i, window->h / 2 - waveTable[channel][i % MAX_SAMPLES], color);  
-	}	 
+	for(i = 0; i < window->w; i++)
+		DrawPoint(window, i, homePosition - waveTable[channel][i % MAX_SAMPLES], color);
 }  
   
   
