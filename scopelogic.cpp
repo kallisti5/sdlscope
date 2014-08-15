@@ -161,9 +161,9 @@ ScopeLogic::CreateWindow(SDL_Surface **window, uint32_t width, uint32_t height)
 	if (*window == NULL) {  
 		printf("Create window failed!\n");  
 		return;  
-	} else {  
-		printf("Create window successfully!\n");
 	}  
+
+	SDL_WM_SetCaption("SDLScope", NULL);
 }  
   
 void
