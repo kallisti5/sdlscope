@@ -13,6 +13,14 @@
 #include <SDL.h>
 
 
+#define MAX_CHANNELS 4
+
+#define SCOPE_STATE_EN_CHAN_0 	1 << 0
+#define SCOPE_STATE_EN_CHAN_1 	1 << 1
+#define SCOPE_STATE_EN_CHAN_2 	1 << 2
+#define SCOPE_STATE_EN_CHAN_3 	1 << 3
+
+
 class ScopeLogic {
 public:
 				ScopeLogic();
@@ -21,15 +29,19 @@ public:
     void        Render(SDL_Surface *src, SDL_Surface *dst);
 	void 		CreateWindow(SDL_Surface** window, uint32_t width, uint32_t height);
 
+	void 		ToggleState(uint32_t item);
+
 //	void 		DrawBG(SDL_Surface* screen);
 
 private:
-	uint32_t 	waveTable[64];
-	void 		GenerateWave(uint32_t position);
+	uint32_t 	state;
+
+	uint32_t 	waveTable[MAX_CHANNELS][64];
+	void 		GenerateWave(uint32_t position, uint32_t channel);
 
 	void 		DrawGrid(SDL_Surface* window);
-	void 		DrawWave(SDL_Surface* window);
-	void 		DrawWave2(SDL_Surface* window);
+	void 		DrawWave(SDL_Surface* window, uint32_t channel);
+	//void 		DrawWave2(SDL_Surface* window);
 
 	void 		DrawHLine(SDL_Surface* screen, uint32_t x, uint32_t y, uint32_t w, uint32_t color, uint32_t flag);
 	void 		DrawVLine(SDL_Surface* screen, uint32_t x, uint32_t y, uint32_t h, uint32_t color, uint32_t flag);

@@ -59,8 +59,22 @@ main(int argc, char *argv[])
 				/*case SDL_MOUSEBUTTONDOWN:
 					break;*/
 				case SDL_KEYDOWN:
-					if (event.key.keysym.sym == SDLK_ESCAPE) {
-						quit = SDL_TRUE;
+					switch(event.key.keysym.sym) {
+						case SDLK_ESCAPE:
+							quit = SDL_TRUE;
+							break;
+						case SDLK_1:
+							scope->ToggleState(SCOPE_STATE_EN_CHAN_0);
+							break;
+						case SDLK_2:
+							scope->ToggleState(SCOPE_STATE_EN_CHAN_1);
+							break;
+						case SDLK_3:
+							scope->ToggleState(SCOPE_STATE_EN_CHAN_2);
+							break;
+						case SDLK_4:
+							scope->ToggleState(SCOPE_STATE_EN_CHAN_3);
+							break;
 					}
 					break;
 				case SDL_QUIT:

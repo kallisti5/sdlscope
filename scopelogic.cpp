@@ -13,9 +13,9 @@
 
 
 ScopeLogic::ScopeLogic()
+	:
+	state(0)
 {
-
-
 }
 
 
@@ -23,6 +23,13 @@ ScopeLogic::~ScopeLogic()
 {
 
 
+}
+
+
+void
+ScopeLogic::ToggleState(uint32_t item)
+{
+	state ^= item;
 }
 
 
@@ -93,11 +100,17 @@ ScopeLogic::DrawPoint(SDL_Surface *screen, uint32_t x, uint32_t y, uint32_t colo
  
 
 void
-ScopeLogic::GenerateWave(uint32_t position)
-{  
+ScopeLogic::GenerateWave(uint32_t position, uint32_t channel)
+{
+
+	if (channel > MAX_CHANNELS) {
+		printf("%s: Requested waveform generated on improper channel!\n", __func__);
+		return;
+	}
+	
 	int i = 0;  
 	for(i = 0;i < 64; i++) {
-		waveTable[i] = (sin(2 * 3.1415 * i / 64.0 + position * 3.1415 / 128) + 1) * 25.0;  
+		waveTable[channel][i] = (sin(2 * 3.1415 * i / 64.0 + position * 3.1415 / 128) + 1) * 25.0 * (channel + 1);
 	}  
 }  
   
@@ -184,33 +197,47 @@ ScopeLogic::DrawGrid(SDL_Surface *window)
  
 
 void
-ScopeLogic::DrawWave(SDL_Surface *window)  
-{  
-	int i;  
-	uint32_t color;  
-	color = SDL_MapRGB(window->format, 0xFF,0,0);  
-	for(i = 0; i < window->w; i++) {  
-		DrawPoint(window, i, window->h/2 - waveTable[i%64], color);  
-	}	 
-}  
-  
-  
-void
-ScopeLogic::DrawWave2(SDL_Surface *window)  
+ScopeLogic::DrawWave(SDL_Surface *window, uint32_t channel)
 {
-	int i;  
-	uint32_t color;  
-	color = SDL_MapRGB(window->format, 0xFF,0xff,0);  
+	int i;
+
+	uint32_t color;
+	switch(channel) {
+		case 0:
+			color = SDL_MapRGB(window->format, 0xFF, 0, 0);
+			break;
+		case 1:
+			color = SDL_MapRGB(window->format, 0xFF, 0xFF, 0);
+			break;
+		case 2:
+			color = SDL_MapRGB(window->format, 0, 0xFF, 0);
+			break;
+		case 3:
+			color = SDL_MapRGB(window->format, 0xFF, 0, 0xFF);
+			break;
+	}
+	
 	for(i = 0; i < window->w; i++) {  
-		DrawPoint(window, i, window->h/2 - (waveTable[(i+15)%64] >> 1), color);  
+		DrawPoint(window, i, window->h / 2 - waveTable[channel][i % 64], color);  
 	}	 
 }  
+  
+  
+//void
+//ScopeLogic::DrawWave2(SDL_Surface *window)
+//{
+//	int i;  
+//	uint32_t color = SDL_MapRGB(window->format, 0xFF,0xff,0);  
+//	for(i = 0; i < window->w; i++) {  
+//		DrawPoint(window, i, window->h / 2 - (waveTable[(i + 15) % 64] >> 1), color);  
+//	}	 
+//}  
  
 
 void
 ScopeLogic::Render(SDL_Surface *src, SDL_Surface *dst)  
 {  
-	static uint32_t position = 0;  
+	static uint32_t position;  
   
 	position += 10;  
 	if (position == 128)  
@@ -220,9 +247,19 @@ ScopeLogic::Render(SDL_Surface *src, SDL_Surface *dst)
 	update.y = 50;  
 	  
 	DrawGrid(src);  
-	GenerateWave(position);  
-	DrawWave(src);  
-	DrawWave2(src);  
+	GenerateWave(position, 0);
+	GenerateWave(position, 1);
+	GenerateWave(position, 2);
+	GenerateWave(position, 3);
+
+	if ((state & SCOPE_STATE_EN_CHAN_0) != 0)
+		DrawWave(src, 0);
+	if ((state & SCOPE_STATE_EN_CHAN_1) != 0)
+		DrawWave(src, 1);
+	if ((state & SCOPE_STATE_EN_CHAN_2) != 0)
+		DrawWave(src, 2);
+	if ((state & SCOPE_STATE_EN_CHAN_3) != 0)
+		DrawWave(src, 3);
   
 	if (SDL_BlitSurface(src, NULL, dst, &update) < 0) {  
 		printf("Blit failed: %s\n", SDL_GetError());  
