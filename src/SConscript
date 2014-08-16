@@ -1,0 +1,11 @@
+import os
+import sys
+import platform
+
+Import("*")
+
+sdlscope = env.Clone()
+
+sdlscope.Append(CXXFLAGS = ['-D_GNU_SOURCE=1', '-D_REENTRANT', '-I/usr/include/SDL'])
+sdlscope.Append(LINKFLAGS = ['-lSDL', '-lpthread', '-lm'])
+sdlscope.Program(target = 'sdlscope', source = ['main.cpp', 'scopelogic.cpp'])
